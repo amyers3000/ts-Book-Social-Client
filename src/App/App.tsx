@@ -1,7 +1,8 @@
+import Header from "../Components/Nav/Header";
 
 function App() {
   return (
-    <div>Hi</div>
+    <Header/>
   );
 }
 
