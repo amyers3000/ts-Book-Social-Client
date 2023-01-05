@@ -1,4 +1,5 @@
 import { createTheme, ThemeProvider } from "@mui/material";
+import { Route, Routes } from "react-router-dom";
 import Home from "../Components/Home/Home";
 
 
@@ -14,7 +15,9 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </ThemeProvider>
   );
 }

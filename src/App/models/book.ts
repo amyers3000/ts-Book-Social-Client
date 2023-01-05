@@ -1,6 +1,7 @@
 
 
 export interface BookData {
+  id: string;
   volumeInfo: {
     title: string;
     categories?: string[];

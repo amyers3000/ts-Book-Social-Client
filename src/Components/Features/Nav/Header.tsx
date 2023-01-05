@@ -1,11 +1,11 @@
 import { AppBar, Box, IconButton, List, ListItem, Toolbar, Typography } from '@mui/material'
-import SearchBar from '../Features/SearchBar'
+import SearchBar from '../SearchBar'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
 import SideBar from './SideBar';
 import { Container } from '@mui/system';
-import Image from '../../assets/new.png'
+import Image from '../../../assets/new.png'
 
 const Links = ['Browse', 'My Books', "Friends"]
 

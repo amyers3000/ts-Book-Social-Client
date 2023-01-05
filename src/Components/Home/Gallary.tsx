@@ -1,7 +1,5 @@
-import { Box, Paper, Grid, Typography } from "@mui/material"
-import { Container } from "@mui/system"
+import { Box, Paper, Grid } from "@mui/material"
 import { useEffect } from "react"
-import { BookData } from "../../App/models/book"
 import { useAppSelector, useAppDispatch } from "../../store/hooks"
 import { getBooks } from "../../store/searchSlice"
 import GallaryItem from "./GallaryItem"
@@ -13,11 +11,13 @@ const Gallary = () => {
     const dispatch = useAppDispatch();
 
 
+
     useEffect(() => {
         if (status === 'idle') {
             dispatch(getBooks(title))
+            console.log(data)
         }
-    }, [status, dispatch])
+    }, [status, dispatch, title])
 
     let content;
     if (status === 'loading' || data?.length === 0) {

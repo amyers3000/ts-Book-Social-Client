@@ -1,9 +1,6 @@
 import {  createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosResponse } from "axios";
+import agent from "../App/lib";
 import { BookData } from "../App/models/book";
-
-let BASE_URL = `http://localhost:5000/api/books/`
-
 
 interface SearchState {
     title: string
@@ -15,8 +12,8 @@ interface SearchState {
 
 
 export const getBooks = createAsyncThunk<BookData[], string>('search/getBooks', async (title: string) => {
-        let response = await axios.get(`${BASE_URL}${title}`)
-        return response.data
+        let response = await agent.API.search(title)
+        return response
     }
 )
 

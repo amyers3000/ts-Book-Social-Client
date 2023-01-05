@@ -1,6 +1,6 @@
 import { IconButton, InputBase, Paper } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search';
-import { FormEvent, MouseEvent, useState } from "react"
+import { FormEvent, useState } from "react"
 import { useAppDispatch } from "../../store/hooks";
 import { getBooks, searchTerm } from "../../store/searchSlice";
 
@@ -18,6 +18,7 @@ const SearchBar = ({ open }: Props) => {
         e.preventDefault()
         dispatch(searchTerm({term}))
         dispatch(getBooks(term))
+        
     }
 
     

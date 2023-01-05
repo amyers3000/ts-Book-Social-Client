@@ -1,16 +1,26 @@
-let BASE_URL = 'http://localhost:5000/api'
+import axios, { AxiosResponse } from "axios"
 
-export function apiCall(method: string, payload: unknown | null, url : string) {
-    const options: RequestInit = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }
-    if (method === 'POST' || method === "PUT") {
-        options.body = JSON.stringify(payload)
-    }
-   
-    return fetch(`${BASE_URL}/${url}`, options)
-    
+axios.defaults.baseURL = 'http://localhost:5000/api/'
+
+const responseBody = (response: AxiosResponse) => response.data;
+
+
+
+const requests = {
+    get: (url: string) => axios.get(url).then(responseBody),
+    post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
+    put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+    delete: (url: string) => axios.delete(url).then(responseBody)
 }
+
+const API = {
+    search: (title: string) => requests.get(`books/${title}`),
+    save: (id: string) => requests.post("books", {id})
+}
+
+
+const agent = {
+    API
+}
+
+export default agent

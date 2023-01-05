@@ -1,18 +1,41 @@
 import { Grid, Card, CardContent, CardActionArea } from '@mui/material'
+import { useState } from 'react'
+import agent from '../../App/lib'
 import { BookData } from '../../App/models/book'
+import BookPopup from './BookPopup'
 
 interface Props {
     book: BookData
 }
 
 const GallaryItem = ({ book }: Props) => {
+    let [open, setOpen] = useState<boolean>(false)
+    let [error, setError] = useState<string>("")
 
+    function handleClose(){
+        setOpen(false)
+        setError("")
+    }
+    const handleOpen = () => setOpen(true)
+
+
+    function handleSave() {
+
+        agent.API.save(book.id)
+            .catch(err => {
+                if (err.response.status === 401) {
+                    setError("Unauthorized : Please login or make an account")
+                }else if(err.response.status === 500){
+                    setError("Unable to save book due to server error")
+                }
+            })
+    }
 
     return (
         <>
-            <Grid item  xs={6} md={3}>
+            <Grid item xs={6} md={3}>
                 <Card >
-                    <CardActionArea >
+                    <CardActionArea onClick={() => handleOpen()} >
                         {book.volumeInfo.imageLinks ?
                             <CardContent
                                 component='img'
@@ -23,6 +46,15 @@ const GallaryItem = ({ book }: Props) => {
                                 src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Ym9va3xlbnwwfHwwfHw"
                                 sx={{ width: 150, height: 220 }} />}
                     </CardActionArea>
+                    <BookPopup
+                        error={error}
+                        title={book.volumeInfo.title}
+                        author={book.volumeInfo.authors}
+                        description={book.volumeInfo.description}
+                        handleClose={handleClose}
+                        open={open}
+                        handleSave={handleSave}
+                    />
                 </Card>
             </Grid>
         </>
