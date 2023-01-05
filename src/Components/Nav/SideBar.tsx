@@ -23,7 +23,7 @@ const SideBar = ({ openMenu, handleOpenMenu }: Props) => {
                 </Box>
                 <List>
                     {Links.map((title) => (
-                        <ListItem>
+                        <ListItem key={title}>
                             {title.toUpperCase()}
                         </ListItem>
                     ))}

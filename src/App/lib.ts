@@ -1,6 +1,6 @@
-let BASE_URL = 'http://localhost:5236/api/Email'
+let BASE_URL = 'http://localhost:5000/api'
 
-export function apiCall(method: string, payload: unknown) {
+export function apiCall(method: string, payload: unknown | null, url : string) {
     const options: RequestInit = {
         method: method,
         headers: {
@@ -10,5 +10,7 @@ export function apiCall(method: string, payload: unknown) {
     if (method === 'POST' || method === "PUT") {
         options.body = JSON.stringify(payload)
     }
-    return fetch(`${BASE_URL}`, options)
+   
+    return fetch(`${BASE_URL}/${url}`, options)
+    
 }
