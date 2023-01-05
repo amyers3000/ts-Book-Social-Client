@@ -1,6 +1,6 @@
 import { Grid, Card, CardContent, CardActionArea } from '@mui/material'
 import { useState } from 'react'
-import agent from '../../App/lib'
+import agent, { Errors } from '../../App/lib'
 import { BookData } from '../../App/models/book'
 import BookPopup from './BookPopup'
 
@@ -10,11 +10,11 @@ interface Props {
 
 const GallaryItem = ({ book }: Props) => {
     let [open, setOpen] = useState<boolean>(false)
-    let [error, setError] = useState<string>("")
+    let [error, setError] = useState<Errors | null>(null)
 
     function handleClose(){
         setOpen(false)
-        setError("")
+        setError(null)
     }
     const handleOpen = () => setOpen(true)
 
@@ -22,12 +22,8 @@ const GallaryItem = ({ book }: Props) => {
     function handleSave() {
 
         agent.API.save(book.id)
-            .catch(err => {
-                if (err.response.status === 401) {
-                    setError("Unauthorized : Please login or make an account")
-                }else if(err.response.status === 500){
-                    setError("Unable to save book due to server error")
-                }
+            .catch(err => {        
+                setError({code: err.response.status, message:err.response.data.message})
             })
     }
 

@@ -15,7 +15,6 @@ const Gallary = () => {
     useEffect(() => {
         if (status === 'idle') {
             dispatch(getBooks(title))
-            console.log(data)
         }
     }, [status, dispatch, title])
 

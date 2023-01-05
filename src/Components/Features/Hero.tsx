@@ -1,9 +1,7 @@
-import { Paper, Grid, Box, Typography, Button, Container } from '@mui/material'
+import { Paper, Grid, Box, Typography } from '@mui/material'
 import Image from "../../assets/main.jpg"
 import Header from './Nav/Header'
-import Amazon from "../../assets/download.png"
-import Barns from "../../assets/BarnesNoble.png"
-import WebButton from './WebButton'
+
 
 interface Props {
     buttonSeen: boolean
@@ -21,8 +19,6 @@ const Hero = ({ buttonSeen }: Props) => {
                         <Typography variant="h5" color="secondary">Welcome Alex, let's get reading</Typography>
                     </Box>
                     <Box sx={{display:{ xs: 'none', md:'flex'}}}>
-                    {!!buttonSeen && <WebButton image={Barns} message="Order books at Barns and Noble"/>}
-                    {!!buttonSeen && <WebButton image={Amazon} message="Order books at Amazon"/>}
                     </Box>
                 </Grid>
             </Grid>

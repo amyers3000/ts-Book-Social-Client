@@ -4,7 +4,15 @@ axios.defaults.baseURL = 'http://localhost:5000/api/'
 
 const responseBody = (response: AxiosResponse) => response.data;
 
+export interface Credentials {
+    username: string
+    password: string
+}
 
+export interface Errors {
+    code: number
+    message: string
+}
 
 const requests = {
     get: (url: string) => axios.get(url).then(responseBody),
@@ -18,9 +26,13 @@ const API = {
     save: (id: string) => requests.post("books", {id})
 }
 
+const User = {
+    login: (credentials : Credentials) => requests.post("users/login", credentials)
+}
 
 const agent = {
-    API
+    API,
+    User
 }
 
 export default agent

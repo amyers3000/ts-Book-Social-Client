@@ -1,6 +1,7 @@
 import { Dialog, DialogTitle, DialogContentText, DialogContent, DialogActions, Button, Alert, IconButton, Box } from '@mui/material'
 import parse from 'html-react-parser'
 import ClearIcon from '@mui/icons-material/Clear';
+import { Errors } from '../../App/lib';
 
 
 
@@ -11,7 +12,7 @@ interface Props {
     handleClose: () => void
     open: boolean
     handleSave: () => void
-    error : string
+    error : Errors | null
 
 }
 
@@ -24,14 +25,14 @@ const BookPopup = ({ title, author, description, handleClose, open, handleSave, 
             aria-describedby="modal-modal-description"
         >
             {!!error && <Alert severity='error'>
-                {error}
+                {`${error.code} : ${error.message}`}
             </Alert>}
             <Box display='flex' justifyContent='space-between'>
             <DialogTitle id="modal-modal-title">
                 {title}
             </DialogTitle>
             <IconButton onClick={handleClose} sx={{mr: 2}}>
-                        <ClearIcon />
+                        <ClearIcon sx={{ pl: 1, pr: 1}} />
             </IconButton>
             </Box>
             <DialogContentText sx={{ pl: 3 }}>
