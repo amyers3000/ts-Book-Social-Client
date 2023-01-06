@@ -7,12 +7,12 @@ import { Credentials, Sign } from "../App/models/user";
 
 interface UserState {
     data: {
-        firstName: string | undefined
-        lastName: string | undefined
-        username: string | undefined
-        city: string | undefined
-        state: string | undefined
-        following: Following[] | null,
+        firstName?: string 
+        lastName?: string 
+        username?: string 
+        city?: string 
+        state?: string 
+        following?: Following[] 
     } | {}
     status: "loading" | "idle" | "rejected" | "succeeded"
     error: string | null | undefined

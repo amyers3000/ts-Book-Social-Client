@@ -7,7 +7,7 @@ interface Props {
 const GalleryMessage = ({message} : Props) => {
   return (
     <Grid item xs={12} >
-        <Typography variant="h4" sx={{display: 'flex', justifyContent: 'center'}}>{message}</Typography>
+        <Typography align="center" variant="h4">{message}</Typography>
     </Grid>
   )
 }

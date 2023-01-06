@@ -1,4 +1,5 @@
-import {  createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import { getErrorMessage } from "../App/errorHandling";
 import agent from "../App/lib";
 import { BookData } from "../App/models/book";
@@ -8,18 +9,24 @@ interface SearchState {
     data: BookData[]
     status: "loading" | "idle" | "rejected" | "succeeded"
     error: string | null | undefined
-   
+
 }
 
 
-export const getBooks = createAsyncThunk<BookData[], string>('search/getBooks', async (title: string) => {
-        try {
-            let response = await agent.API.search(title)
-            return response
-        } catch (error) {
-            return getErrorMessage(error)
+export const getBooks = createAsyncThunk<BookData[], string>('search/getBooks', async (title: string, thunkApi) => {
+    try {
+        let response = await agent.API.search(title)
+        return response
+    } catch (error) {
+        console.log(error)
+        if (axios.isAxiosError(error) && error.response) {
+            if (error.response.status === 404) {
+                return thunkApi.rejectWithValue("No books match search criteria")
+            }
         }
+        return thunkApi.rejectWithValue(getErrorMessage(error))
     }
+}
 )
 
 
@@ -28,7 +35,7 @@ const initialState: SearchState = {
     data: [],
     status: 'idle',
     error: null
-    
+
 }
 
 
@@ -40,7 +47,7 @@ const searchSlice = createSlice({
             const { term } = action.payload
             state.title = term
         },
-      
+
 
     },
     extraReducers(builder) {
@@ -54,7 +61,10 @@ const searchSlice = createSlice({
             })
             .addCase(getBooks.rejected, (state, action) => {
                 state.status = 'rejected'
-                state.error = action.error.message
+                console.log(action)
+                let message = getErrorMessage(action.payload)
+
+                state.error = message
             })
     }
 

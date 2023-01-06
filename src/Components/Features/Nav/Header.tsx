@@ -1,4 +1,4 @@
-import { Alert, AppBar, Box, IconButton, List, ListItemButton, ListItemText, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, IconButton, List, ListItemButton, ListItemText, Toolbar, Typography } from '@mui/material'
 import SearchBar from '../SearchBar'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -17,7 +17,6 @@ const Header = () => {
   const navigate = useNavigate()
   const [open, setOpen] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false)
-  const { error, status } = useAppSelector((state) => (state.search))
   const dispatch = useAppDispatch()
 
   function handleOpen() {
@@ -76,9 +75,6 @@ const Header = () => {
           </Box>
         </Toolbar>
         {open && search}
-        {status === "rejected" && <Alert severity='error'>
-          {`${error}`}
-        </Alert>}
       </AppBar >
 
     </>

@@ -21,7 +21,6 @@ const GallaryItem = ({ book }: Props) => {
 
 
     function handleSave() {
-
         agent.API.save(book.id)
             .catch(err => {        
                 setError(getErrorMessage(err))
