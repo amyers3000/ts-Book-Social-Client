@@ -1,6 +1,7 @@
 import { Grid, Card, CardContent, CardActionArea } from '@mui/material'
 import { useState } from 'react'
-import agent, { Errors } from '../../App/lib'
+import { getErrorMessage } from '../../App/errorHandling'
+import agent from '../../App/lib'
 import { BookData } from '../../App/models/book'
 import BookPopup from './BookPopup'
 
@@ -10,11 +11,11 @@ interface Props {
 
 const GallaryItem = ({ book }: Props) => {
     let [open, setOpen] = useState<boolean>(false)
-    let [error, setError] = useState<Errors | null>(null)
+    let [error, setError] = useState<string>("")
 
     function handleClose(){
         setOpen(false)
-        setError(null)
+        setError("")
     }
     const handleOpen = () => setOpen(true)
 
@@ -23,7 +24,7 @@ const GallaryItem = ({ book }: Props) => {
 
         agent.API.save(book.id)
             .catch(err => {        
-                setError({code: err.response.status, message:err.response.data.message})
+                setError(getErrorMessage(err))
             })
     }
 

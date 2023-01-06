@@ -1,32 +1,43 @@
-import { Container, CssBaseline, Box, Avatar, Typography, TextField, Button, Grid, Alert } from '@mui/material'
-import { FormEvent, useState } from 'react'
+import { Container, Box, Avatar, Typography, TextField, Button, Grid, Alert } from '@mui/material'
+import { FormEvent, useEffect, useState } from 'react'
 import LockIcon from '@mui/icons-material/Lock';
-import { Link } from 'react-router-dom'
-import agent, { Credentials, Errors } from '../../App/lib';
+import { Link, useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { loginUser } from '../../store/userSlice';
+import { Credentials } from '../../App/models/user';
 
 
 
 const LogIn = () => {
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
+    const { token, error, status } = useAppSelector((state) => state.authenticate)
     const [credentials, setCredentials] = useState<Credentials>({
         username: '',
         password: ''
     })
-    const [error, setError] = useState<Errors | null>(null)
+    
+    useEffect(() => {
+        if(token || localStorage.getItem('token')){
+            navigate('/home', {replace: true})
+        }
+        // eslint-disable-next-line
+    }, [])
+   
+
+  
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        agent.User.login(credentials)
-            .catch(err => {
-                console.log(err)
-                setError({ code: err.response.status, message: err.response.data.message })
-            })
+        dispatch(loginUser(credentials))
+        setTimeout(() => navigate("/home", {replace: true}), 300)
+        
 
     }
 
     return (
 
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
             <Box
                 sx={{
                     marginTop: 8,
@@ -41,8 +52,8 @@ const LogIn = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                {!!error && <Alert severity='error'>
-                    {`${error.code} : ${error.message}`}
+                {status === "rejected" && <Alert severity='error'>
+                    {`${error}`}
                 </Alert>}
                 <Box component="form" onSubmit={(e) => handleSubmit(e)} noValidate sx={{ mt: 1 }}>
                     <TextField
@@ -89,3 +100,5 @@ const LogIn = () => {
 }
 
 export default LogIn
+
+

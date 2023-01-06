@@ -3,11 +3,9 @@ import Image from "../../assets/main.jpg"
 import Header from './Nav/Header'
 
 
-interface Props {
-    buttonSeen: boolean
-}
 
-const Hero = ({ buttonSeen }: Props) => {
+
+const Hero = () => {
 
     return (
         <Paper sx={{ height: 700 }} style={{ backgroundImage: `url(${Image})`, backgroundPosition: '50% 20%' }}>

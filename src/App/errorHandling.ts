@@ -1,4 +1,10 @@
+import axios from "axios"
+
 export function getErrorMessage(error: unknown) {
-    if (error instanceof Error) return error.message
-    return String(error)
-  }
+    let message
+    if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 500) return message = "Server Error"
+            message = error.response.data.message
+    } else message = String(error)
+    return message
+}

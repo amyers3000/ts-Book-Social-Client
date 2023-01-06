@@ -1,4 +1,5 @@
 import {  createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getErrorMessage } from "../App/errorHandling";
 import agent from "../App/lib";
 import { BookData } from "../App/models/book";
 
@@ -12,8 +13,12 @@ interface SearchState {
 
 
 export const getBooks = createAsyncThunk<BookData[], string>('search/getBooks', async (title: string) => {
-        let response = await agent.API.search(title)
-        return response
+        try {
+            let response = await agent.API.search(title)
+            return response
+        } catch (error) {
+            return getErrorMessage(error)
+        }
     }
 )
 
@@ -34,8 +39,6 @@ const searchSlice = createSlice({
         searchTerm: (state, action) => {
             const { term } = action.payload
             state.title = term
-            console.log(state.title)
-            
         },
       
 
