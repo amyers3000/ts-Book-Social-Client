@@ -22,8 +22,8 @@ export interface User {
     state: string
     following?: Following[]
     followers?: Followers[]
-    books?: SavedBooks[]
     createdAt: string
+    userId: number
 }
 
 export interface Following {

@@ -35,7 +35,8 @@ const User = {
 }
 
 const Comments = {
-    newComment: (bookId:number, content: string, token: string | null) => requests.post(`comments/${bookId}`,{content}, config(token))
+    newComment: (bookId:number, content: string, token: string | null) => requests.post(`comments/${bookId}`,{content}, config(token)),
+    removeComment: (commentId: number, token: string | null) => requests.delete(`comments/${commentId}`, config(token))
 }
 
 const agent = {

@@ -8,50 +8,26 @@ import Profile from '../Features/Profile'
 import Books from '../Features/Books'
 import BookView from '../Features/BookView'
 import { useDispatch } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { addComment, addTempComment, checkUser, getSavedBook, removeSavedBook } from '../../store/bookShelfSlice'
+import { useLocation } from 'react-router-dom'
 
 
 
 const Shelf = () => {
-  const [data, setData] = useState<User | {}>({})
-  const [bookshelf, setBookShelf] = useState<SavedBooks[] | []>([])
-  const [bookData, setBookData] = useState<SavedBooks | {}>({})
-  const [show, setShow] = useState<boolean>(false)
-  const [bookId, setBookId ] = useState<number[]>()
-  const dispatch = useDispatch()
+  const { bookData, show, bookshelfData, user } = useAppSelector((state) => (state.bookshelf))
+  const dispatch = useAppDispatch()
+  const location = useLocation()
  
 
   useEffect(() => {
-    agent.User.check(localStorage.getItem('token'))
-      .then(res => { setData(res.user); setBookShelf(res.user.books) })
-      .catch(e => console.log(e))
-  }, [bookData])
+    dispatch(checkUser())
+  }, [])
 
-  useEffect(() => {
-    if(bookId)
-    handleGetBook(bookId[bookId.length - 1])
-  }, [bookId])
-
-  function handleGetBook(id: string | number | undefined) {
-    agent.Book.getBook(id, localStorage.getItem('token'))
-      .then(res => setBookData(res))
-      .then(() => setShow(true))
-      .catch(e => console.log(e))
+ 
+  function handleClick(id: number | string){
+      dispatch(getSavedBook(id))
   }
-
-  function handleRemove(bookId: number) {
-    agent.Book.remove(bookId, localStorage.getItem('token'))
-      .then(() => setBookData({}))
-      .catch(e => console.log(e))
-
-  }
-
-
-  function handleSubmit(e: FormEvent<HTMLFormElement>, id: number, newComment: string) {
-    e.preventDefault()
-    agent.Comments.newComment(id, newComment, localStorage.getItem('token'))
-        .then(() =>  bookId ? setBookId([...bookId, id]) : setBookId([id]))
-        .catch(e => console.log(e))
-}
 
   let gridSize: number;
   let gridItemSize: number;
@@ -67,10 +43,8 @@ const Shelf = () => {
       authors={bookData.authors}
       image={bookData.image}
       description={bookData.description}
-      comments={bookData.comments}
       bookId={bookData.bookId}
-      handleRemove={handleRemove}
-      handleSubmit={handleSubmit}
+      location={location.pathname}
        />
   } else {
     gridSize = 12
@@ -82,16 +56,16 @@ const Shelf = () => {
 
 
   let profile;
-  if ("firstName" in data) {
-    let date = new Date(data.createdAt)
+  if (user !== undefined) {
+    let date = new Date(user.createdAt)
     profile = <Profile
-      firstName={data.firstName}
-      lastName={data.lastName}
-      city={data.city}
+      firstName={user.firstName}
+      lastName={user.lastName}
+      city={user.city}
       date={date.toLocaleDateString()}
-      state={data.state}
-      followers={data.followers}
-      following={data.following}
+      state={user.state}
+      followers={user.followers}
+      following={user.following}
     />
   }
 
@@ -103,13 +77,13 @@ const Shelf = () => {
           <Grid container spacing={4} sx={{ height: 535 }}>
             <Grid item lg={gridSize} md={12}>
               <Grid container spacing={2} sx={{ height: 510, overflow: "hidden", overflowY: "scroll", overflowX:"scroll" }}>
-                {bookshelf ? bookshelf.map((book) => (
-                  <Books redux={false}
+                {bookshelfData ? bookshelfData.map((book) => (
+                  <Books 
                     gridItemSize={gridItemSize}
                     key={book.bookId}
                     image={book.image}
-                    handleGetBook={handleGetBook}
                     bookId={book.bookId}
+                    handleClick={handleClick}
                   />
                 )) : null}
 

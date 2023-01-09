@@ -1,29 +1,25 @@
 import { Grid, Card, CardActionArea, CardContent } from '@mui/material'
 import { useAppDispatch } from '../../store/hooks'
 import { getOneBook } from '../../store/bookSlice'
+import { getSavedBook } from '../../store/bookShelfSlice'
 
 interface Props {
     image : string | undefined
-    handleGetBook : (id: number | string) => void
     bookId : number | string
     gridItemSize : number
-    redux : boolean
+    handleClick: (id : number | string) => void
+
+    
 }
 
-const Books = ({image, handleGetBook, bookId, gridItemSize, redux}: Props) => {
-    const dispatch = useAppDispatch();
-    function handleClick(bookId: number | string) {
-        console.log(bookId)
-        dispatch(getOneBook({bookId}))
-     }
+const Books = ({image, bookId, gridItemSize, handleClick}: Props) => {
 
-     
-     let show : (bookId: string | number) => void = redux ? handleClick : handleGetBook
+
 
     return (
         <Grid item  xs={4} md={gridItemSize}>
             <Card  sx={{height:235 , ml:1}}>
-                <CardActionArea onClick={() => show(bookId)} >
+                <CardActionArea onClick={() => handleClick(bookId)} >
                     {image !== undefined ?
                         <CardContent
                             component='img'

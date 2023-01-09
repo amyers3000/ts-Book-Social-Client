@@ -30,9 +30,9 @@ export interface Comments {
     commentId: number
     createdAt: string
     user: {
-      username: string
-      userId: number
-      firstName: string
-      lastName: string
+      username?: string
+      userId?: number
+      firstName?: string
+      lastName?: string
     }
 }

@@ -7,6 +7,7 @@ import { clearStoredBook, getBooks, getOneBook } from "../../store/bookSlice"
 import Books from "../Features/Books"
 import BookView from "../Features/BookView"
 import GalleryMessage from "./GalleryMessage"
+import { useLocation } from "react-router-dom"
 
 
 const Gallary = () => {
@@ -14,13 +15,21 @@ const Gallary = () => {
     const [newError, setNewError] = useState<string>("")
     const [success, setSuccess] = useState<boolean>(false)
     const dispatch = useAppDispatch();
+    const location = useLocation()
+
+
+    function handleClick(id: string | number) {    
+        dispatch(getOneBook({id}))
+        setNewError("")
+        setSuccess(false)      
+    }
 
     let gridSize: number;
     let gridItemSize: number;
     let size: number
     let view: JSX.Element | null
     let display;
-    if (bookData !== undefined) {
+    if (bookData !== undefined && "volumeInfo" in bookData[0]) {
         gridSize = 6
         gridItemSize = 4
         size = 1400
@@ -30,6 +39,7 @@ const Gallary = () => {
             image={bookData[0].volumeInfo.imageLinks?.thumbnail}
             description={bookData[0].volumeInfo.description}
             apiBookId={bookData[0].id}
+            location={location.pathname}
         />
     } else {
         gridSize = 12
@@ -38,6 +48,8 @@ const Gallary = () => {
         view = null
         display = { display: "none" }
     }
+
+    
 
     useEffect(() => {
         if (status === 'idle') {
@@ -49,18 +61,7 @@ const Gallary = () => {
     }, [])
 
 
-    function handleGetBook(bookId: number | string) {
-        try {
-            setNewError("")
-            setSuccess(false)
-            console.log(newError)
-            dispatch(getOneBook(bookId))
-           
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
+   
 
     function handleSave(bookId: string | number) {
         agent.Book.save(bookId, localStorage.getItem('token'))
@@ -76,11 +77,10 @@ const Gallary = () => {
     } else if (status === 'succeeded') {
         content = data && data.map((book, i) => (
             <Books
-                redux={true}
+                handleClick={handleClick}
                 gridItemSize={gridItemSize}
                 key={book.id}
                 image={book.volumeInfo.imageLinks?.thumbnail}
-                handleGetBook={handleGetBook}
                 bookId={book.id}
             />))
     } else if (status === 'rejected') {
@@ -104,8 +104,8 @@ const Gallary = () => {
                     <Grid item lg={6} md={12} sx={display}>
                         <Grid container spacing={2} sx={{ height: 500, overflow: "hidden", overflowY: "scroll" }}>
                             {newError === "" && success === false ? <Grid item xs={12}><Alert severity="info">Save book or search for another one</Alert></Grid> : null}
-                            {newError && <Grid item xs={12}><Alert severity="error">{newError}</Alert></Grid>}
-                            {success && <Grid item xs={12}><Alert>Book Saved</Alert></Grid>}
+                            {newError  && <Grid item xs={12}><Alert severity="error">{newError}</Alert></Grid>}
+                            {success && newError===""&& <Grid item xs={12}><Alert>Book Saved</Alert></Grid>}
                             {view}
                         </Grid>
                     </Grid>

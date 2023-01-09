@@ -29,15 +29,7 @@ const initialState: UserState = {
     token: null
 }
 
-export const checkUser = createAsyncThunk('user/checkUser', async () => {
-    try {
-        let response = await agent.User.check(localStorage.getItem('token'))
-        return response
-    } catch (error) {
-        return getErrorMessage(error)   
-    }
-}
-)
+
 
 export const loginUser = createAsyncThunk('user/loginUser', async (credentials: Credentials, thunkApi) =>{
         try {
@@ -75,17 +67,6 @@ const userSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(checkUser.pending, (state) => {
-                state.status = 'loading'
-            })
-            .addCase(checkUser.fulfilled, (state, action) => {
-                state.status = 'succeeded'
-                state.userData = action.payload
-            })
-            .addCase(checkUser.rejected, (state, action) => {
-                state.status = 'rejected'
-                state.error = action.error.message
-            })
             .addCase(loginUser.pending, (state) => {
                 state.status = 'loading'
             })

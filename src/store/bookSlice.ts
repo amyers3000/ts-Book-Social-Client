@@ -54,8 +54,9 @@ const bookSlice = createSlice({
             state.title = term
         },
         getOneBook: (state, action) => {
-            const { bookId } = action.payload
-            let book = state.data.filter((book) => (book.id === bookId))
+            const { id} = action.payload
+            console.log(action.payload)
+            let book = state.data.filter((book) => (book.id === id))
             state.bookData = book
         },
         clearStoredBook: (state)  => {
