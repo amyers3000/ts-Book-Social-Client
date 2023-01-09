@@ -6,12 +6,27 @@ import { useState } from 'react';
 import SideBar from './SideBar';
 import { Container } from '@mui/system';
 import Image from '../../../assets/new.png'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { useAppDispatch } from '../../../store/hooks';
 import { signOut } from '../../../store/userSlice';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { clearStoredBook } from '../../../store/bookSlice';
 
-const Links = ['BookShelf', "Friends"]
 
+const navLinks = [
+  { title: 'Bookshelf' , path: '/bookshelf'},
+  { title: 'Friends', path: '/friends'},
+  {title: 'Browse', path: '/home'}
+]
+
+const navStyle = {
+  color: 'inherit',
+  textDecoration: 'none',
+  typography: 'h6',
+  // how to get to pseudo elements
+  '&:hover': {
+      color: 'grey.500'
+  },
+}
 
 const Header = () => {
   const navigate = useNavigate()
@@ -43,32 +58,35 @@ const Header = () => {
     <>
       <AppBar position="static" sx={{ mb: 4 }} style={{ background: 'transparent', boxShadow: 'none' }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <IconButton onClick={handleOpen} sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <IconButton onClick={handleOpen} sx={{ display: { xs: 'flex', md: 'none' }, alignItems:'center' }}>
             <SearchIcon color='secondary' />
           </IconButton>
-          <Box display='flex' alignItems='center' sx={{ mr: { xs: 0, md: 10 } }}>
-            <Container component='img' src={Image} style={{ height: 80, width: 95 }} sx={{ mr: 0, p: 2 }} />
-            <Typography variant='h5'>Book-Social</Typography>
+          <Box display='flex' alignItems='center' sx={{ mr: { xs: 0, md: 19 } }}>
+            <Container component='img' src={Image} style={{ height: 75, width: 'auto' }} sx={{ mr: 0, p: 2 }} />
+            <Typography variant='h5'>Book Social</Typography>
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }} alignItems='center'>
             <SearchBar open={open} />
           </Box>
-          <Box display={{ xs: 'flex', md: 'none' }} alignItems='center'>
+          <Box display={{ sm: 'flex', xs:'flex', md: 'none' }} alignItems='center'>
             <IconButton onClick={handleOpenMenu}>
               <MenuIcon color='secondary' />
             </IconButton>
             <SideBar openMenu={openMenu} handleOpenMenu={handleOpenMenu} />
           </Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ display: { sm: 'none', xs:'none', md: 'flex' } }}>
             <List sx={{ display: 'flex' }}>
-              {Links.map((title) => (
-                <ListItemButton
-                  key={title}
+              {navLinks.map((nav) => (
+                <ListItemButton 
+                  component={NavLink}
+                  to={nav.path}
+                  key={nav.title}
+                  sx={navStyle}
                 >
-                  <ListItemText primary={title.toUpperCase()}/>
+                  <ListItemText  primary={nav.title.toUpperCase()}/>
                 </ListItemButton>
               ))}
-              <ListItemButton onClick={handleClick}>
+              <ListItemButton onClick={handleClick} sx={navStyle}>
                 <ListItemText primary={"SignOut".toUpperCase()}/>
               </ListItemButton>
             </List>

@@ -1,5 +1,6 @@
-import { Box, Drawer, IconButton, List, ListItem } from '@mui/material'
+import { Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear';
+import { NavLink } from 'react-router-dom';
 
 
 interface Props {
@@ -7,30 +8,50 @@ interface Props {
     handleOpenMenu: () => void;
 }
 
-const Links = ['Browse', 'My Books', "Friends"]
+const navStyle = {
+    color: 'inherit',
+    textDecoration: 'none',
+    typography: 'h6',
+    // how to get to pseudo elements
+    '&:hover': {
+        color: 'grey.500'
+    },
+  }
+
+const navLinks = [
+    { title: 'Bookshelf' , path: '/bookshelf'},
+    { title: 'Friends', path: '/friends'},
+    {title: 'Browse', path: '/home'}
+  ]
 
 const SideBar = ({ openMenu, handleOpenMenu }: Props) => {
     return (
-        <div>
+        <>
             <Drawer
                 anchor='right'
                 open={openMenu}
+                sx={{width: 300}}
             >
                 <Box>
                     <IconButton onClick={handleOpenMenu}>
                         <ClearIcon />
                     </IconButton>
                 </Box>
-                <List>
-                    {Links.map((title) => (
-                        <ListItem key={title}>
-                            {title.toUpperCase()}
-                        </ListItem>
-                    ))}
+                <List sx={{width: 150}}>
+                {navLinks.map((nav) => (
+                <ListItemButton 
+                  component={NavLink}
+                  to={nav.path}
+                  key={nav.title}
+                  sx={navStyle}
+                >
+                  <ListItemText  primary={nav.title.toUpperCase()}/>
+                </ListItemButton>
+              ))}
                 </List>
 
             </Drawer>
-        </div>
+        </>
     )
 }
 

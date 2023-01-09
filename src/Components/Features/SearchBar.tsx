@@ -2,7 +2,8 @@ import { IconButton, InputBase, Paper } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search';
 import { FormEvent, useState } from "react"
 import { useAppDispatch } from "../../store/hooks";
-import { getBooks, searchTerm } from "../../store/searchSlice";
+import { getBooks, searchTerm } from "../../store/bookSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export interface Props {
     open: boolean;
@@ -11,6 +12,8 @@ export interface Props {
 
 
 const SearchBar = ({ open }: Props) => {
+    const location = useLocation()
+    const navigate = useNavigate()
     const [term, setTerm] = useState<string>("")
     const dispatch = useAppDispatch()
 
@@ -18,6 +21,9 @@ const SearchBar = ({ open }: Props) => {
         e.preventDefault()
         dispatch(searchTerm({term}))
         dispatch(getBooks(term))
+        if(location.pathname !== "/home"){
+            navigate("/home")
+        }
         
     }
 

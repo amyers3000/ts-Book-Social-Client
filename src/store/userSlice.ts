@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getErrorMessage } from "../App/errorHandling";
-import agent from "../App/lib";
-import { Credentials, Sign } from "../App/models/user";
+import agent from "../App/api";
+import { Credentials, Following, Sign } from "../App/models/user";
 
 
 
 interface UserState {
-    data: {
+    userData: {
         firstName?: string 
         lastName?: string 
         username?: string 
@@ -16,26 +16,22 @@ interface UserState {
     } | {}
     status: "loading" | "idle" | "rejected" | "succeeded"
     error: string | null | undefined
-    token: string;
+    token: string | null;
 }
 
 
-interface Following {
-    firstName: string
-    lastName: string
-    username: string
-}
+
 
 const initialState: UserState = {
-    data: {},
+    userData: {},
     status: 'idle',
     error: null,
-    token: ""
+    token: null
 }
 
-export const checkUser = createAsyncThunk<UserState>('user/checkUser', async () => {
+export const checkUser = createAsyncThunk('user/checkUser', async () => {
     try {
-        let response = await agent.User.check()
+        let response = await agent.User.check(localStorage.getItem('token'))
         return response
     } catch (error) {
         return getErrorMessage(error)   
@@ -73,8 +69,8 @@ const userSlice = createSlice({
     reducers: {
         signOut : (state) => {
             localStorage.removeItem('token')
-            state.data = {}
-            state.token = ""
+            state.userData = {}
+            state.token = null
         },
     },
     extraReducers(builder) {
@@ -84,7 +80,7 @@ const userSlice = createSlice({
             })
             .addCase(checkUser.fulfilled, (state, action) => {
                 state.status = 'succeeded'
-                state.data = action.payload
+                state.userData = action.payload
             })
             .addCase(checkUser.rejected, (state, action) => {
                 state.status = 'rejected'
@@ -95,8 +91,8 @@ const userSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.status = "succeeded"
-                state.data = action.payload.user
-                state.token = action.payload.token
+                state.userData = action.payload.user
+                state.token = localStorage.getItem('token')
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = "rejected"
@@ -108,7 +104,7 @@ const userSlice = createSlice({
             })
             .addCase(signupUser.fulfilled, (state, action) => {
                 state.status = "succeeded"
-                state.data = action.payload.user
+                state.userData = action.payload.user
             })
             .addCase(signupUser.rejected, (state, action) => {
                 state.status = "rejected"

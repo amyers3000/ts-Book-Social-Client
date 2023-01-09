@@ -1,19 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { getErrorMessage } from "../App/errorHandling";
-import agent from "../App/lib";
+import agent from "../App/api";
 import { BookData } from "../App/models/book";
 
-interface SearchState {
+interface bookState {
     title: string
     data: BookData[]
+    bookData: BookData[] | undefined
+    clicked: boolean
     status: "loading" | "idle" | "rejected" | "succeeded"
     error: string | null | undefined
 
 }
 
 
-export const getBooks = createAsyncThunk<BookData[], string>('search/getBooks', async (title: string, thunkApi) => {
+export const getBooks = createAsyncThunk<BookData[], string>('book/getBooks', async (title: string, thunkApi) => {
     try {
         let response = await agent.API.search(title)
         return response
@@ -30,23 +32,35 @@ export const getBooks = createAsyncThunk<BookData[], string>('search/getBooks', 
 )
 
 
-const initialState: SearchState = {
+
+
+const initialState: bookState = {
     title: "Dog",
     data: [],
+    bookData: undefined,
+    clicked: false,
     status: 'idle',
     error: null
 
 }
 
 
-const searchSlice = createSlice({
-    name: "search",
+const bookSlice = createSlice({
+    name: "book",
     initialState,
     reducers: {
         searchTerm: (state, action) => {
             const { term } = action.payload
             state.title = term
         },
+        getOneBook: (state, action) => {
+            const { bookId } = action.payload
+            let book = state.data.filter((book) => (book.id === bookId))
+            state.bookData = book
+        },
+        clearStoredBook: (state)  => {
+            state.bookData = undefined
+        }
 
 
     },
@@ -71,5 +85,5 @@ const searchSlice = createSlice({
 
 })
 
-export const { searchTerm } = searchSlice.actions;
-export default searchSlice.reducer;
+export const { searchTerm, getOneBook, clearStoredBook } = bookSlice.actions;
+export default bookSlice.reducer;

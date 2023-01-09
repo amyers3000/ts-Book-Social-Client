@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import searchReducer from "./searchSlice"
+import bookReducer from "./bookSlice"
 import userReducer from "./userSlice"
 
 export const store = configureStore({
     reducer: {
-        search: searchReducer,
+        book: bookReducer,
         authenticate: userReducer
     }
 })

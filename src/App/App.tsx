@@ -1,5 +1,7 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
+import Bookshelf from "../Components/Bookshelf/Bookshelf";
+import Shelf from "../Components/Bookshelf/Gallary";
 import ProtectedRoute from "../Components/Features/ProtectedRoute";
 import Home from "../Components/Home/Home";
 import LogIn from "../Components/User/LogIn";
@@ -29,6 +31,11 @@ function App() {
         <Route path="/home" element={
           <ProtectedRoute>
             <Home />
+          </ProtectedRoute>
+        } />
+        <Route path="/bookshelf" element={
+          <ProtectedRoute>
+            <Shelf/>
           </ProtectedRoute>
         } />
         <Route path='/signup' element={<SignUp />} />
