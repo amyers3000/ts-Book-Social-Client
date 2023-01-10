@@ -31,7 +31,8 @@ const Book = {
 const User = {
     login: (credentials : Credentials) => requests.post("users/login", credentials),
     signup: (credentials : Sign) => requests.post("users/signup", credentials),
-    check: (token: string | null) => requests.get("users/check", config(token))
+    check: (token: string | null) => requests.get("users/check", config(token)),
+    search: (term: string, token: string| null) => requests.get(`users/search/${term}`, config(token))
 }
 
 const Comments = {

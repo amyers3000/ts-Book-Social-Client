@@ -17,8 +17,8 @@ const Books = ({image, bookId, gridItemSize, handleClick}: Props) => {
 
 
     return (
-        <Grid item  xs={4} md={gridItemSize}>
-            <Card  sx={{height:235 , ml:1}}>
+        <Grid item  xs={4} md={gridItemSize} >
+            <Card  sx={{height:235 , ml:1}} style={{ backgroundColor: '#FCFCFC'  }}>
                 <CardActionArea onClick={() => handleClick(bookId)} >
                     {image !== undefined ?
                         <CardContent

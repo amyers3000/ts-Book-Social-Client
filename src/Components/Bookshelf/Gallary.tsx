@@ -59,6 +59,7 @@ const Shelf = () => {
   if (user !== undefined) {
     let date = new Date(user.createdAt)
     profile = <Profile
+      bookshelf={{md:'50%', lg:'auto'}}
       firstName={user.firstName}
       lastName={user.lastName}
       city={user.city}
@@ -73,7 +74,7 @@ const Shelf = () => {
     <>
       <Hero title={"Your Bookshelf."} profile={profile} message={"Browse your favorites and discuss with friends"} />
       <Box sx={{ mt: { lg: -38, xs: -15, p: 5 }, width: { lg: size, md: 900, xs: 500 }, mb: 'auto', ml: 'auto', mr: 'auto' }}>
-        <Paper elevation={3} style={{ backgroundColor: '#FFFFFF' }} sx={{ m: 'auto' }} >
+        <Paper elevation={3} sx={{ m: 'auto' }} >
           <Grid container spacing={4} sx={{ height: 535 }}>
             <Grid item lg={gridSize} md={12}>
               <Grid container spacing={2} sx={{ height: 510, overflow: "hidden", overflowY: "scroll", overflowX:"scroll" }}>

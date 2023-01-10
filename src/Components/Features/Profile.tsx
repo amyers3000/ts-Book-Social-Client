@@ -1,36 +1,55 @@
-import { Paper, Stack, Avatar, Box, Typography, Divider } from '@mui/material'
+import { Paper, Stack, Avatar, Box, Typography, Divider, Button, Grid } from '@mui/material'
 import { Followers, Following } from '../../App/models/user'
 import { stringToColor } from '../../App/utils'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 
 interface Props {
     firstName: string
     lastName: string
     city: string
     state: string
-    date: string
+    date: string | Date
     following?: Following[]
     followers?: Followers[]
+    location?: string
+    bookshelf: {
+        md: string
+        lg: string
+    }
+    username?: string
 }
 
-const Profile = ({ firstName, lastName, city, state, date, following, followers }: Props) => {
-    
+const Profile = ({ firstName, lastName, city, state, date, following, followers, location, bookshelf, username }: Props) => {
+    const { userData } = useAppSelector((state) => (state.authenticate))
+
 
     return (
-        <Box sx={{ width:{ md: '50%', lg:"auto"} }}>
-        <Paper elevation={4} style={{ backgroundColor: '#FFFFFF' }} sx={{ p: 2, display:'flex', justifyContent:{lg:'normal', md:"center"}}} >
-            <Stack alignItems="center" direction="row" spacing={4} divider={<Divider orientation='vertical' flexItem/>}>
-                <Avatar sx={{ width: 80, height: 80, fontSize: 30, bgcolor: stringToColor(`${firstName} ${lastName}`) }}>{`${firstName[0]}${lastName[0]}`}</Avatar>
-                <Box>
-                    <Typography align='center' variant='h5'> {`${firstName} ${lastName}`} </Typography>
-                    <Typography align='center' variant='subtitle1'>{`${city}, ${state}`}</Typography>
-                    <Typography align='center' variant='subtitle1'>{`Joined ${date}`}</Typography>
-                </Box>
-                <Box>
-                    <Typography>Followers: {followers === undefined ? 0 : followers.length}</Typography>
-                    <Typography>Following: {following === undefined ? 0 : following.length}</Typography>
-                </Box>
-            </Stack>
-        </Paper>
+        <Box sx={{ width: bookshelf }}>
+            <Paper elevation={4} style={{ backgroundColor: '#FFFFFF' }} sx={{ p: 2, display: 'flex', justifyContent: { lg: 'normal', md: "center" } }} >
+                <Grid container>
+
+                    <Stack alignItems="center" direction="row" spacing={4} divider={<Divider orientation='vertical' flexItem />}>
+                        <Avatar sx={{ width: 60, height: 60, fontSize: 30, bgcolor: stringToColor(`${firstName} ${lastName}`) }}>{`${firstName[0]}${lastName[0]}`}</Avatar>
+                        <Box display='flex' >
+                            <Box>
+                                <Typography align='center' variant='h6'> {`${firstName} ${lastName}`} </Typography>
+                                <Typography align='center' variant='subtitle2'>{`${city}, ${state}`}</Typography>
+                                <Typography align='center' variant='subtitle2'>{`Joined ${date}`}</Typography>
+
+                            </Box>
+                            <Box sx={{ m: 'auto' }}>
+                                {userData.following.find((user) => user.username === username) ? <Button>Remove</Button> : <Button>Add</Button>}
+                            </Box>
+                        </Box>
+                        
+                        {location !== "/friends" && <Box>
+                            <Typography>Followers: {followers === undefined ? 0 : followers.length}</Typography>
+                            <Typography>Following: {following === undefined ? 0 : following.length}</Typography>
+                        </Box>}
+
+                    </Stack>
+                </Grid>
+            </Paper>
         </Box>
     )
 }

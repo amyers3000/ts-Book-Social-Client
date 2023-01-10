@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Bookshelf from "../Components/Bookshelf/Bookshelf";
 import Shelf from "../Components/Bookshelf/Gallary";
 import ProtectedRoute from "../Components/Features/ProtectedRoute";
+import Friends from "../Components/Friends/Friends";
 import Home from "../Components/Home/Home";
 import LogIn from "../Components/User/LogIn";
 import SignUp from "../Components/User/SignUp";
@@ -36,6 +37,11 @@ function App() {
         <Route path="/bookshelf" element={
           <ProtectedRoute>
             <Shelf/>
+          </ProtectedRoute>
+        } />
+        <Route path="/friends" element={
+          <ProtectedRoute>
+            <Friends/>
           </ProtectedRoute>
         } />
         <Route path='/signup' element={<SignUp />} />

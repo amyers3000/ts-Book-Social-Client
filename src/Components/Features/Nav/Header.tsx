@@ -2,14 +2,14 @@ import { AppBar, Box, IconButton, List, ListItemButton, ListItemText, Toolbar, T
 import SearchBar from '../SearchBar'
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import SideBar from './SideBar';
 import { Container } from '@mui/system';
 import Image from '../../../assets/new.png'
 import { useAppDispatch } from '../../../store/hooks';
 import { signOut } from '../../../store/userSlice';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { clearStoredBook } from '../../../store/bookSlice';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { clearStoredBook, getBooks, searchTerm } from '../../../store/bookSlice';
 
 
 const navLinks = [
@@ -33,6 +33,19 @@ const Header = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const dispatch = useAppDispatch()
+  const location = useLocation()
+  
+  
+
+  function handleClick(e: FormEvent<HTMLFormElement>, term: string, location: string ){
+    e.preventDefault()
+    dispatch(searchTerm({term}))
+    dispatch(getBooks(term))
+    if(location!== "/home"){
+        navigate("/home")
+    }
+    
+}
 
   function handleOpen() {
     setOpen(!open)
@@ -42,14 +55,14 @@ const Header = () => {
     setOpenMenu(!openMenu)
   }
 
-  function handleClick(){
+  function handleSignout(){
     dispatch(signOut())
     navigate("/")
   }
 
 
   let search = <Toolbar sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', justifyContent: 'center' }}>
-    <SearchBar open={open} />
+    <SearchBar size={400} open={open} placeholder="Search Book Titles" handleClick={handleClick} location={location.pathname} />
   </Toolbar>
 
 
@@ -66,7 +79,7 @@ const Header = () => {
             <Typography variant='h5'>Book Social</Typography>
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }} alignItems='center'>
-            <SearchBar open={open} />
+            <SearchBar size={400} open={open} placeholder="Search Book Titles" handleClick={handleClick} location={location.pathname} />
           </Box>
           <Box display={{ sm: 'flex', xs:'flex', md: 'none' }} alignItems='center'>
             <IconButton onClick={handleOpenMenu}>
@@ -86,7 +99,7 @@ const Header = () => {
                   <ListItemText  primary={nav.title.toUpperCase()}/>
                 </ListItemButton>
               ))}
-              <ListItemButton onClick={handleClick} sx={navStyle}>
+              <ListItemButton onClick={handleSignout} sx={navStyle}>
                 <ListItemText primary={"SignOut".toUpperCase()}/>
               </ListItemButton>
             </List>
