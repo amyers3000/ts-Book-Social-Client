@@ -49,7 +49,7 @@ const Gallary = () => {
                                             <Box sx={{ mt: '40%', width: 'auto', display:{ sm:"flex", xs:'none'} }}>
                                                 <Typography variant="h4" color="#C4C4C4">No Friends</Typography>
                                             </Box>}
-                                            <Button></Button>
+                                            
                                     </Box>
                                 </Grid>
                             </Grid>
